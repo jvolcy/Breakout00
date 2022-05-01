@@ -27,6 +27,8 @@ public class PlayerController : MonoBehaviour
             HorzPos -= 0.05f;
         }
 
+        HorzPos = Mathf.Clamp(HorzPos, -8f, 8f);
+
         transform.position = new Vector2(HorzPos, transform.position.y);
 
     }

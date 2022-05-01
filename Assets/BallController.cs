@@ -9,10 +9,15 @@ public class BallController : MonoBehaviour
     public AudioClip PlayerHitSound;
     public CameraController cameraController;
     public GameObject StreamerPrefab;
+    public GameObject GameOverText;
+
     const int StreamerLength = 50;
 
     GameObject[] Streamer = new GameObject[StreamerLength];
-    
+
+    const int NUM_BLOCKS = 40;
+    int numBlocksHit = 0;
+
     float HorzSpeed = 0.05f;
     float VertSpeed = -0.05f;
     AudioSource audioSource;
@@ -27,6 +32,8 @@ public class BallController : MonoBehaviour
             Streamer[i].transform.position = transform.position;
             Streamer[i].transform.localScale = Streamer[i].transform.localScale * (StreamerLength-i) / StreamerLength;  //Streamer 0 is full size, streamer StreamerLength-1 is 1/StreamerLength full size.
         }
+
+        GameOverText.SetActive(false);
     }
 
     // Update is called once per frame
@@ -78,6 +85,13 @@ public class BallController : MonoBehaviour
             audioSource.clip = BlockHitSound;
             //cameraController.NumShakes = 5;
             cameraController.Shake(0.02f, 2, 0.4f);
+            numBlocksHit++;
+            if (numBlocksHit == NUM_BLOCKS)
+            {
+                GameOverText.SetActive(true);
+                VertSpeed = 0f;
+                HorzSpeed = 0f;
+            }
         }
 
         audioSource.Play();
