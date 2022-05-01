@@ -7,7 +7,12 @@ public class BallController : MonoBehaviour
     public AudioClip BlockHitSound;
     public AudioClip WallHitSound;
     public AudioClip PlayerHitSound;
-       
+    public CameraController cameraController;
+    public GameObject StreamerPrefab;
+    const int StreamerLength = 50;
+
+    GameObject[] Streamer = new GameObject[StreamerLength];
+    
     float HorzSpeed = 0.05f;
     float VertSpeed = -0.05f;
     AudioSource audioSource;
@@ -16,12 +21,25 @@ public class BallController : MonoBehaviour
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
+        for (int i=0; i< StreamerLength; i++)
+        {
+            Streamer[i] = Instantiate(StreamerPrefab);
+            Streamer[i].transform.position = transform.position;
+            Streamer[i].transform.localScale = Streamer[i].transform.localScale * (StreamerLength-i) / StreamerLength;  //Streamer 0 is full size, streamer StreamerLength-1 is 1/StreamerLength full size.
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
         transform.Translate(new Vector2(HorzSpeed, VertSpeed));
+
+        //stream
+        for (int i= StreamerLength-1; i>0; i--)
+        {
+            Streamer[i].transform.position = Streamer[i - 1].transform.position;
+        }
+        Streamer[0].transform.position = transform.position;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -58,6 +76,8 @@ public class BallController : MonoBehaviour
             VertSpeed = -VertSpeed;
             Destroy(other.gameObject);
             audioSource.clip = BlockHitSound;
+            //cameraController.NumShakes = 5;
+            cameraController.Shake(0.02f, 2, 0.4f);
         }
 
         audioSource.Play();
