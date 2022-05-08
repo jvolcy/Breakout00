@@ -78,6 +78,12 @@ public class BallController : MonoBehaviour
             VertSpeed = -VertSpeed;
             audioSource.clip = PlayerHitSound;
         }
+        else if (other.name == "Ground")
+        {
+        }
+        else if (other.name == "LeftTwin" || other.name == "RightTwin")
+        {
+        }
         else    //we hit a block
         {
             VertSpeed = -VertSpeed;
