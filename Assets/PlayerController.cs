@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public GameObject LeftTwin;
-    public GameObject RightTwin;
-    public GameObject LeftTwinHead;
-    public GameObject RightTwinHead;
-    public GameObject LeftTwinFeet;
-    public GameObject RightTwinFeet;
+    public TwinCtrl LeftTwin;
+    public TwinCtrl RightTwin;
+    public GameObject Bar;
 
-    Animator LeftTwinAnimator;
-    Animator RightTwinAnimator;
+    Vector2 BarTransformPosition;
+    Quaternion BarTransformRotation;
 
     float HorzPos;
 
@@ -20,8 +17,8 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         HorzPos = transform.position.x;
-        LeftTwinAnimator = LeftTwin.GetComponent<Animator>();
-        RightTwinAnimator = RightTwin.GetComponent<Animator>();
+        BarTransformPosition = Bar.transform.localPosition;
+        BarTransformRotation = Bar.transform.localRotation;
     }
 
     // Update is called once per frame
@@ -29,26 +26,19 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            LeftTwinAnimator.SetBool("Forward", true);
-            RightTwinAnimator.SetBool("Reverse", true);
+            LeftTwin.forward();
+            RightTwin.reverse();
         }
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            LeftTwinAnimator.SetBool("Reverse", true);
-            RightTwinAnimator.SetBool("Forward", true);
+            LeftTwin.reverse();
+            RightTwin.forward();
         }
 
-        if (Input.GetKeyUp(KeyCode.RightArrow))
+        if (Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.LeftArrow))
         {
-            LeftTwinAnimator.SetBool("Forward", false);
-            RightTwinAnimator.SetBool("Reverse", false);
-        }
-
-        if (Input.GetKeyUp(KeyCode.LeftArrow))
-        {
-            LeftTwinAnimator.SetBool("Reverse", false);
-            RightTwinAnimator.SetBool("Forward", false);
+            idle();
         }
 
         if (Input.GetKey(KeyCode.RightArrow))
@@ -63,33 +53,60 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.L))
         {
-            Debug.Log("L");
-            LeftTwinAnimator.SetTrigger("Fall");
-
-            LeftTwinAnimator.SetBool("Reverse", false);
-            LeftTwinAnimator.SetBool("Forward", false);
-            RightTwinAnimator.SetBool("Reverse", false);
-            RightTwinAnimator.SetBool("Forward", false);
-
-            LeftTwinFeet.GetComponent<Collider2D>().enabled = false;
+            fallLeft();
         }
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            RightTwinAnimator.SetTrigger("Fall");
-
-            LeftTwinAnimator.SetBool("Reverse", false);
-            LeftTwinAnimator.SetBool("Forward", false);
-            RightTwinAnimator.SetBool("Reverse", false);
-            RightTwinAnimator.SetBool("Forward", false);
-
-            RightTwinFeet.GetComponent<Collider2D>().enabled = false;
-
+            fallRight();
         }
 
-        HorzPos = Mathf.Clamp(HorzPos, -8f, 8f);
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Reset();
+        }
+
+        HorzPos = Mathf.Clamp(HorzPos, -6f, 6f);
 
         transform.position = new Vector2(HorzPos, transform.position.y);
 
     }
+
+    public void fallLeft()
+    {
+        idle();
+        LeftTwin.fall();
+    }
+
+    public void fallRight()
+    {
+        idle();
+        RightTwin.fall();
+    }
+
+    public void idle()
+    {
+        LeftTwin.idle();
+        RightTwin.idle();
+    }
+
+    public void Reset()
+    {
+        HorzPos = 0;
+        LeftTwin.Reset();
+        RightTwin.Reset();
+        Bar.transform.localPosition = BarTransformPosition;
+        Bar.transform.localRotation = BarTransformRotation;
+    }
+
+
+
+    public void  CopyTransform(Transform source, Transform destination)
+    {
+        destination.localPosition = transform.localPosition;
+        destination.localRotation = transform.localRotation;
+        destination.localScale = transform.localScale;
+    }
+
+
 }

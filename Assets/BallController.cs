@@ -73,18 +73,12 @@ public class BallController : MonoBehaviour
             VertSpeed = -VertSpeed;
             audioSource.clip = WallHitSound;
         }
-        else if (other.name == "Player")
+        else if (other.name == "Bar")
         {
             VertSpeed = -VertSpeed;
             audioSource.clip = PlayerHitSound;
         }
-        else if (other.name == "Ground")
-        {
-        }
-        else if (other.name == "LeftTwin" || other.name == "RightTwin")
-        {
-        }
-        else    //we hit a block
+        else if (other.tag == "Block")   //we hit a block
         {
             VertSpeed = -VertSpeed;
             Destroy(other.gameObject);
@@ -99,7 +93,18 @@ public class BallController : MonoBehaviour
                 HorzSpeed = 0f;
             }
         }
-
+        /*else if (other.name == "Head")
+        {
+            SpriteRenderer spriteRenderer = other.GetComponent<SpriteRenderer>();
+            if (spriteRenderer.flipX)   //right
+            {
+                
+            }
+            else    //left
+            { }
+            
+        }
+        */
         audioSource.Play();
 
     }
