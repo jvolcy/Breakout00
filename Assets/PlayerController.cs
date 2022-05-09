@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     Quaternion BarTransformRotation;
 
     float HorzPos;
+    bool bWalking = false;
 
     // Start is called before the first frame update
     void Start()
@@ -24,31 +25,36 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if ((Input.GetKeyUp(KeyCode.RightArrow) && (!Input.GetKey(KeyCode.LeftArrow)) ) ||
+            (Input.GetKeyUp(KeyCode.LeftArrow) && (!Input.GetKey(KeyCode.RightArrow)) ))
+        {
+            idle();
+            bWalking = false;
+        }
+
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             LeftTwin.forward();
             RightTwin.reverse();
+            bWalking = true;
         }
-
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             LeftTwin.reverse();
             RightTwin.forward();
+            bWalking = true;
         }
 
-        if (Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.LeftArrow))
+        if (bWalking)  //not walking
         {
-            idle();
-        }
-
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            HorzPos += 0.05f;
-        }
-
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            HorzPos -= 0.05f;
+            if (Input.GetKey(KeyCode.RightArrow))
+            {
+                HorzPos += 0.05f;
+            }
+            else if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                HorzPos -= 0.05f;
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.L))

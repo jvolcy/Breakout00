@@ -18,8 +18,13 @@ public class BallController : MonoBehaviour
     const int NUM_BLOCKS = 40;
     int numBlocksHit = 0;
 
-    float HorzSpeed = 0.05f;
-    float VertSpeed = -0.05f;
+    float HorzSpeed = 0.06f;
+    float VertSpeed = -0.04f;
+    float HorzSpeedRandomAmp = 0.01f;
+    float VertSpeedRandomAmp = 0.01f;
+    float MaxHorzSpeedAmp = 0.07f;
+    float MaxVertSpeedAmp = 0.07f;
+
     AudioSource audioSource;
 
     // Start is called before the first frame update
@@ -56,31 +61,37 @@ public class BallController : MonoBehaviour
         if (other.name == "LeftWall")
         {
             HorzSpeed = -HorzSpeed;
+            HorzSpeed += Random.Range(-HorzSpeedRandomAmp, HorzSpeedRandomAmp);
             audioSource.clip = WallHitSound;
         }
         else if (other.name == "RightWall")
         {
             HorzSpeed = -HorzSpeed;
+            HorzSpeed += Random.Range(-HorzSpeedRandomAmp, HorzSpeedRandomAmp);
             audioSource.clip = WallHitSound;
         }
         else if (other.name == "TopWall")
         {
             VertSpeed = -VertSpeed;
+            VertSpeed += Random.Range(-VertSpeedRandomAmp, VertSpeedRandomAmp);
             audioSource.clip = WallHitSound;
         }
         else if (other.name == "BottomWall")
         {
             VertSpeed = -VertSpeed;
+            VertSpeed += Random.Range(-VertSpeedRandomAmp, VertSpeedRandomAmp);
             audioSource.clip = WallHitSound;
         }
         else if (other.name == "Bar")
         {
             VertSpeed = -VertSpeed;
+            VertSpeed += Random.Range(-VertSpeedRandomAmp, VertSpeedRandomAmp);
             audioSource.clip = PlayerHitSound;
         }
         else if (other.tag == "Block")   //we hit a block
         {
             VertSpeed = -VertSpeed;
+            VertSpeed += Random.Range(-VertSpeedRandomAmp, VertSpeedRandomAmp);
             Destroy(other.gameObject);
             audioSource.clip = BlockHitSound;
             //cameraController.NumShakes = 5;
@@ -93,20 +104,14 @@ public class BallController : MonoBehaviour
                 HorzSpeed = 0f;
             }
         }
-        /*else if (other.name == "Head")
-        {
-            SpriteRenderer spriteRenderer = other.GetComponent<SpriteRenderer>();
-            if (spriteRenderer.flipX)   //right
-            {
-                
-            }
-            else    //left
-            { }
-            
-        }
-        */
+
         audioSource.Play();
 
+        //HorzSpeed += Random.Range(-HorzSpeedRandomAmp, HorzSpeedRandomAmp);
+        //VertSpeed += Random.Range(-VertSpeedRandomAmp, VertSpeedRandomAmp);
+
+        HorzSpeed = Mathf.Clamp(HorzSpeed, -MaxHorzSpeedAmp, MaxHorzSpeedAmp);
+        VertSpeed = Mathf.Clamp(VertSpeed, -MaxVertSpeedAmp, MaxVertSpeedAmp);
     }
 
 }
