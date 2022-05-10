@@ -9,12 +9,14 @@ public class TwinCtrl : MonoBehaviour
     public GameObject Head;
     public GameObject Feet;
     public GameObject Hand;
+    AudioSource audioSource;
 
     Animator animator;
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
         StartingPos = transform.localPosition;
     }
 
@@ -42,6 +44,7 @@ public class TwinCtrl : MonoBehaviour
         idle();
         animator.SetTrigger("Fall");
         Feet.GetComponent<Collider2D>().enabled = false;
+        audioSource.Play();
     }
 
     public void idle()

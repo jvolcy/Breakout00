@@ -8,7 +8,7 @@ public class BallController : MonoBehaviour
     public AudioClip BlockHitSound;
     public AudioClip WallHitSound;
     public AudioClip BarHitSound;
-    public AudioClip TwinHitSound;
+    //public AudioClip TwinHitSound;
     public CameraController cameraController;
     public GameObject StreamerPrefab;
     public GameObject GameOverText;
@@ -117,52 +117,43 @@ public class BallController : MonoBehaviour
         if (other.name == "LeftWall" || other.name == "RightWall")
         {
             HorzSpeed = -HorzSpeed;
-            //HorzSpeed += Random.Range(-HorzSpeedRandomAmp, HorzSpeedRandomAmp);
             audioSource.clip = WallHitSound;
+            audioSource.Play();
         }
         else if (other.name == "TopWall" || other.name == "BottomWall")
         {
             VertSpeed = -VertSpeed;
-            //VertSpeed += Random.Range(-VertSpeedRandomAmp, VertSpeedRandomAmp);
+            audioSource.clip = WallHitSound;
+            audioSource.Play();
         }
-
-        if (other.name == "BlockLeft" || other.name == "BlockRight")
+        else if (other.name == "BlockLeft" || other.name == "BlockRight")
         {
             HorzSpeed = -HorzSpeed;
-            //HorzSpeed += Random.Range(-HorzSpeedRandomAmp, HorzSpeedRandomAmp);
             Destroy(other.transform.parent.gameObject);
             BlockHit();
+            audioSource.Play();
         }
         else if (other.name == "BlockTop" || other.name == "BlockBottom")
         {
             VertSpeed = -VertSpeed;
-            //VertSpeed += Random.Range(-VertSpeedRandomAmp, VertSpeedRandomAmp);
             Destroy(other.transform.parent.gameObject);
             BlockHit();
+            audioSource.Play();
         }
-
-        if (other.name == "Bar")
+        else if (other.name == "Head")
+        {
+            Score += TWIN_HIT_PTS;
+        }
+        else if (other.name == "Bar")
         {
             VertSpeed = -VertSpeed;
-            //VertSpeed += Random.Range(-VertSpeedRandomAmp, VertSpeedRandomAmp);
             audioSource.clip = BarHitSound;
+            audioSource.Play();
             Score += BAR_HIT_PTS;
         }
 
-        if (other.name == "Head")
-        {
-            Score += TWIN_HIT_PTS;
-            audioSource.clip = TwinHitSound;
-        }
-
-        audioSource.Play();
-
-        //HorzSpeed = Mathf.Clamp(HorzSpeed, -MaxHorzSpeedAmp, MaxHorzSpeedAmp);
-        //VertSpeed = Mathf.Clamp(VertSpeed, -MaxVertSpeedAmp, MaxVertSpeedAmp);
-
         UpdateBlocks();
         UpdateScore();
-
     }
 
     void BlockHit()
@@ -178,7 +169,7 @@ public class BallController : MonoBehaviour
             VertSpeed = 0f;
             HorzSpeed = 0f;
         }
-        avoidBackToBackCollison = 3;
+        avoidBackToBackCollison = 1;
         Score += BLOCK_HIT_PTS;
     }
 
