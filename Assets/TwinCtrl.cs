@@ -38,6 +38,7 @@ public class TwinCtrl : MonoBehaviour
 
     public void fall()
     {
+        if (fallen()) return;   //do nothing if we are already down
         idle();
         animator.SetTrigger("Fall");
         Feet.GetComponent<Collider2D>().enabled = false;
@@ -56,5 +57,8 @@ public class TwinCtrl : MonoBehaviour
         animator.SetTrigger("Reset");
     }
 
-
+    bool fallen()   //return true if we are down
+    {
+        return !Feet.GetComponent<Collider2D>().enabled;
+    }
 }

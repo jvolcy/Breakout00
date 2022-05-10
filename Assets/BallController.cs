@@ -1,21 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class BallController : MonoBehaviour
 {
     public AudioClip BlockHitSound;
     public AudioClip WallHitSound;
-    public AudioClip PlayerHitSound;
+    public AudioClip BarHitSound;
+    public AudioClip TwinHitSound;
     public CameraController cameraController;
     public GameObject StreamerPrefab;
     public GameObject GameOverText;
-    public int NumBlocks = 55;
+    public BlockMaker blockMaker;
+    public TMP_Text TxtScore;
+    public TMP_Text TxtBlocks;
+
+    int NumBlocks;
 
     const int StreamerLength = 50;
 
     GameObject[] Streamer = new GameObject[StreamerLength];
 
+    const int BLOCK_HIT_PTS = 10;
+    const int BAR_HIT_PTS = 20;
+    const int TWIN_HIT_PTS = -100;
+
+    int Score = 0;
     int numBlocksHit = 0;
 
     float HorzSpeed = 0.06f;
@@ -32,6 +43,11 @@ public class BallController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        NumBlocks = blockMaker.NumOddCols * blockMaker.NumOddRows;
+
+        UpdateBlocks();
+        UpdateScore();
+
         audioSource = GetComponent<AudioSource>();
         for (int i=0; i< StreamerLength; i++)
         {
@@ -99,13 +115,23 @@ public class BallController : MonoBehaviour
         {
             VertSpeed = -VertSpeed;
             VertSpeed += Random.Range(-VertSpeedRandomAmp, VertSpeedRandomAmp);
-            audioSource.clip = PlayerHitSound;
+            audioSource.clip = BarHitSound;
+            Score += BAR_HIT_PTS;
+        }
+
+        if (other.name == "Head")
+        {
+            Score += TWIN_HIT_PTS;
+            audioSource.clip = TwinHitSound;
         }
 
         audioSource.Play();
 
         HorzSpeed = Mathf.Clamp(HorzSpeed, -MaxHorzSpeedAmp, MaxHorzSpeedAmp);
         VertSpeed = Mathf.Clamp(VertSpeed, -MaxVertSpeedAmp, MaxVertSpeedAmp);
+
+        UpdateBlocks();
+        UpdateScore();
     }
 
     void BlockHit()
@@ -120,5 +146,16 @@ public class BallController : MonoBehaviour
             HorzSpeed = 0f;
         }
         avoidBackToBackCollison = 3;
+        Score += BLOCK_HIT_PTS;
+    }
+
+    void UpdateScore()
+    {
+        TxtScore.text = "Score: " + Score.ToString("00000");
+    }
+
+    void UpdateBlocks()
+    {
+        TxtBlocks.text = "Blocks: " + (NumBlocks - numBlocksHit).ToString();
     }
 }

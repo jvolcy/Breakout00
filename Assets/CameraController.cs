@@ -31,7 +31,7 @@ public class CameraController : MonoBehaviour
 
         for (int j = 0; j < NumShakes; j++)
         {
-            background.color = new Color32((byte)Random.Range(100, 255), (byte)Random.Range(100,255), (byte)Random.Range(100,255), 0);
+            background.color = new Color32((byte)Random.Range(100, 255), (byte)Random.Range(100,255), (byte)Random.Range(100,255), 255);
             Vector3 TargetPosition = OriginalPosition + new Vector3(Random.Range(-ShakeAmplitude, ShakeAmplitude), Random.Range(-ShakeAmplitude, ShakeAmplitude), OriginalPosition.z);
             Vector3 PositionError = TargetPosition - transform.position;
             for (int i = 0; i < 5; i++)

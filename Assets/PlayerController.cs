@@ -7,12 +7,15 @@ public class PlayerController : MonoBehaviour
     public TwinCtrl LeftTwin;
     public TwinCtrl RightTwin;
     public GameObject Bar;
+    public float FallRecoverTime = 2f;
 
     Vector2 BarTransformPosition;
     Quaternion BarTransformRotation;
 
     float HorzPos;
     bool bWalking = false;
+    bool fallen = false;
+    float ResetTime;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +28,12 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (fallen)
+        {
+            if (Time.time > ResetTime) Reset();
+            return;
+        }
+
         if ((Input.GetKeyUp(KeyCode.RightArrow) && (!Input.GetKey(KeyCode.LeftArrow)) ) ||
             (Input.GetKeyUp(KeyCode.LeftArrow) && (!Input.GetKey(KeyCode.RightArrow)) ))
         {
@@ -57,6 +66,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        /*
         if (Input.GetKeyDown(KeyCode.L))
         {
             fallLeft();
@@ -71,6 +81,7 @@ public class PlayerController : MonoBehaviour
         {
             Reset();
         }
+        */
 
         HorzPos = Mathf.Clamp(HorzPos, -6f, 6f);
 
@@ -82,12 +93,16 @@ public class PlayerController : MonoBehaviour
     {
         idle();
         LeftTwin.fall();
+        fallen = true;
+        ResetTime = Time.time + FallRecoverTime;
     }
 
     public void fallRight()
     {
         idle();
         RightTwin.fall();
+        fallen = true;
+        ResetTime = Time.time + FallRecoverTime;
     }
 
     public void idle()
@@ -103,6 +118,7 @@ public class PlayerController : MonoBehaviour
         RightTwin.Reset();
         Bar.transform.localPosition = BarTransformPosition;
         Bar.transform.localRotation = BarTransformRotation;
+        fallen = false;
     }
 
 
