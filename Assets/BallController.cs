@@ -38,12 +38,8 @@ public class BallController : MonoBehaviour
     float BallMinAngle = 30 * Mathf.Deg2Rad;
     float BallMaxAngle = 60 * Mathf.Deg2Rad;
 
-    //float HorzSpeedRandomAmp = 0.7f;
-    //float VertSpeedRandomAmp = 0.7f;
-    //float MaxHorzSpeedAmp = 4.9f;
-    //float MaxVertSpeedAmp = 4.9f;
-
     int avoidBackToBackCollison = 0;
+    bool bGameOver = false;
 
     AudioSource audioSource;
 
@@ -70,8 +66,22 @@ public class BallController : MonoBehaviour
     }
 
     // Update is called once per frame
+    Color32 color1 = Color.white;
+    Color32 color2 = Color.white;
     void Update()
     {
+        if (bGameOver)
+        {
+            Color32 color = ColorLerp(color1, color2, 5);
+            if (!lerping)
+            {
+                color1 = color2;
+                color2 = RandomRGB();
+            }
+            GameOverText.GetComponent<TextMesh>().color = color;
+            return;
+        }
+
         transform.Translate(new Vector2(HorzSpeed*Time.deltaTime, VertSpeed*Time.deltaTime));
 
         //stream
@@ -101,7 +111,7 @@ public class BallController : MonoBehaviour
             BallAngle = Mathf.Clamp(BallAngle, BallMinAngle, BallMaxAngle);
             HorzSpeed = BallSpeed * Mathf.Cos(BallAngle);
             VertSpeed = BallSpeed * Mathf.Sin(BallAngle);
-            Debug.Log("Angle: " + BallAngle * Mathf.Rad2Deg);
+            //Debug.Log("Angle: " + BallAngle * Mathf.Rad2Deg);
         }
 
         if (other.name == "LeftWall" || other.name == "RightWall")
@@ -162,6 +172,7 @@ public class BallController : MonoBehaviour
         numBlocksHit++;
         if (numBlocksHit == NumBlocks)
         {
+            bGameOver = true;
             GameOverText.SetActive(true);
             BallSpeed = 0f;
             VertSpeed = 0f;
@@ -179,5 +190,45 @@ public class BallController : MonoBehaviour
     void UpdateBlocks()
     {
         TxtBlocks.text = "Blocks: " + (NumBlocks - numBlocksHit).ToString();
+    }
+
+    bool lerping = false;
+    float lerpEndTime = 0f; 
+    Color32 ColorLerp(Color32 color1, Color32 color2, float LerpTimeSec)
+    {
+        if (!lerping)
+        {
+            lerping = true;
+            lerpEndTime = Time.time + LerpTimeSec;
+            return color1;
+        }
+        else
+        {
+            float ratio = 1 - (lerpEndTime - Time.time) / LerpTimeSec;      //goes from 0 to 1
+            ratio = Mathf.Clamp(ratio, 0f, 1f);
+
+            if (ratio == 1f)
+            {
+                lerping = false;
+                return color2;
+            }
+
+            Color32 color = new Color32();
+            color.r = (byte)(color1.r + ratio * (color2.r - color1.r));
+            color.g = (byte)(color1.g + ratio * (color2.g - color1.g));
+            color.b = (byte)(color1.b + ratio * (color2.b - color1.b));
+            color.a = (byte)(color1.a + ratio * (color2.a - color1.a));
+            return color;
+        }
+    }
+
+    Color32 RandomRGB()
+    {
+        Color32 color = new Color32();
+        color.r = (byte)Random.Range(0, 256);
+        color.g = (byte)Random.Range(0, 256);
+        color.b = (byte)Random.Range(0, 256);
+        color.a = 255;
+        return color;
     }
 }
