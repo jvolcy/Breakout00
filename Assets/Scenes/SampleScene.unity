@@ -940,6 +940,12 @@ MonoBehaviour:
   ColSpacing: 1
   RowSpacing: 0.75
   CenterBlockPos: {x: 0, y: 2}
+  TopRowColor:
+    serializedVersion: 2
+    rgba: 4279058878
+  BottomRowColor:
+    serializedVersion: 2
+    rgba: 4287803384
 --- !u!4 &914029917
 Transform:
   m_ObjectHideFlags: 0
@@ -1850,6 +1856,7 @@ MonoBehaviour:
   cameraController: {fileID: 519420030}
   StreamerPrefab: {fileID: 8011919071563007883, guid: 12c0f4f4ee6c74b24b8bfe8d69566679, type: 3}
   GameOverText: {fileID: 909111013}
+  NumBlocks: 55
 --- !u!58 &2015155575
 CircleCollider2D:
   m_ObjectHideFlags: 0
