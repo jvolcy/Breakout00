@@ -29,12 +29,12 @@ public class BallController : MonoBehaviour
     int Score = 0;
     int numBlocksHit = 0;
 
-    float HorzSpeed = 0.06f;
-    float VertSpeed = -0.04f;
-    float HorzSpeedRandomAmp = 0.01f;
-    float VertSpeedRandomAmp = 0.01f;
-    float MaxHorzSpeedAmp = 0.07f;
-    float MaxVertSpeedAmp = 0.07f;
+    float HorzSpeed = 4.2f;
+    float VertSpeed = -2.8f;
+    float HorzSpeedRandomAmp = 0.7f;
+    float VertSpeedRandomAmp = 0.7f;
+    float MaxHorzSpeedAmp = 4.9f;
+    float MaxVertSpeedAmp = 4.9f;
 
     int avoidBackToBackCollison = 0;
 
@@ -62,7 +62,7 @@ public class BallController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(new Vector2(HorzSpeed, VertSpeed));
+        transform.Translate(new Vector2(HorzSpeed*Time.deltaTime, VertSpeed*Time.deltaTime));
 
         //stream
         for (int i= StreamerLength-1; i>0; i--)
@@ -132,6 +132,7 @@ public class BallController : MonoBehaviour
 
         UpdateBlocks();
         UpdateScore();
+
     }
 
     void BlockHit()

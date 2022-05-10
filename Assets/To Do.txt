@@ -1,0 +1,3 @@
+Fix ball speed (normalize H and V velocities)
+Limit H and V angles
+Cleanup directories

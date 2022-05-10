@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     bool bWalking = false;
     bool fallen = false;
     float ResetTime;
+    float Speed =5f;
 
     // Start is called before the first frame update
     void Start()
@@ -58,11 +59,11 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.RightArrow))
             {
-                HorzPos += 0.05f;
+                HorzPos += Speed * Time.deltaTime;
             }
             else if (Input.GetKey(KeyCode.LeftArrow))
             {
-                HorzPos -= 0.05f;
+                HorzPos -= Speed * Time.deltaTime;
             }
         }
 
