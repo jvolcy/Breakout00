@@ -29,12 +29,19 @@ public class BallController : MonoBehaviour
     int Score = 0;
     int numBlocksHit = 0;
 
-    float HorzSpeed = 4.2f;
-    float VertSpeed = -2.8f;
-    float HorzSpeedRandomAmp = 0.7f;
-    float VertSpeedRandomAmp = 0.7f;
-    float MaxHorzSpeedAmp = 4.9f;
-    float MaxVertSpeedAmp = 4.9f;
+    float HorzSpeed;// = 4.2f;
+    float VertSpeed; // = -2.8f;
+
+    float BallSpeed = 7f;
+    float BallAngle = -45f * Mathf.Deg2Rad;
+    float BallAngleRandomAmp = 10 * Mathf.Deg2Rad;
+    float BallMinAngle = 30 * Mathf.Deg2Rad;
+    float BallMaxAngle = 60 * Mathf.Deg2Rad;
+
+    //float HorzSpeedRandomAmp = 0.7f;
+    //float VertSpeedRandomAmp = 0.7f;
+    //float MaxHorzSpeedAmp = 4.9f;
+    //float MaxVertSpeedAmp = 4.9f;
 
     int avoidBackToBackCollison = 0;
 
@@ -44,6 +51,9 @@ public class BallController : MonoBehaviour
     void Start()
     {
         NumBlocks = blockMaker.NumOddCols * blockMaker.NumOddRows;
+
+        HorzSpeed = BallSpeed * Mathf.Cos(BallAngle);
+        VertSpeed = BallSpeed * Mathf.Sin(BallAngle);
 
         UpdateBlocks();
         UpdateScore();
@@ -83,30 +93,40 @@ public class BallController : MonoBehaviour
         {
             return;
         }
-        
+
+        if (HorzSpeed > 0 && VertSpeed > 0)
+        {
+            BallAngle = Mathf.Atan2(VertSpeed, HorzSpeed);
+            BallAngle += Random.Range(-BallAngleRandomAmp, BallAngleRandomAmp);
+            BallAngle = Mathf.Clamp(BallAngle, BallMinAngle, BallMaxAngle);
+            HorzSpeed = BallSpeed * Mathf.Cos(BallAngle);
+            VertSpeed = BallSpeed * Mathf.Sin(BallAngle);
+            Debug.Log("Angle: " + BallAngle * Mathf.Rad2Deg);
+        }
+
         if (other.name == "LeftWall" || other.name == "RightWall")
         {
             HorzSpeed = -HorzSpeed;
-            HorzSpeed += Random.Range(-HorzSpeedRandomAmp, HorzSpeedRandomAmp);
+            //HorzSpeed += Random.Range(-HorzSpeedRandomAmp, HorzSpeedRandomAmp);
             audioSource.clip = WallHitSound;
         }
         else if (other.name == "TopWall" || other.name == "BottomWall")
         {
             VertSpeed = -VertSpeed;
-            VertSpeed += Random.Range(-VertSpeedRandomAmp, VertSpeedRandomAmp);
+            //VertSpeed += Random.Range(-VertSpeedRandomAmp, VertSpeedRandomAmp);
         }
 
         if (other.name == "BlockLeft" || other.name == "BlockRight")
         {
             HorzSpeed = -HorzSpeed;
-            HorzSpeed += Random.Range(-HorzSpeedRandomAmp, HorzSpeedRandomAmp);
+            //HorzSpeed += Random.Range(-HorzSpeedRandomAmp, HorzSpeedRandomAmp);
             Destroy(other.transform.parent.gameObject);
             BlockHit();
         }
         else if (other.name == "BlockTop" || other.name == "BlockBottom")
         {
             VertSpeed = -VertSpeed;
-            VertSpeed += Random.Range(-VertSpeedRandomAmp, VertSpeedRandomAmp);
+            //VertSpeed += Random.Range(-VertSpeedRandomAmp, VertSpeedRandomAmp);
             Destroy(other.transform.parent.gameObject);
             BlockHit();
         }
@@ -114,7 +134,7 @@ public class BallController : MonoBehaviour
         if (other.name == "Bar")
         {
             VertSpeed = -VertSpeed;
-            VertSpeed += Random.Range(-VertSpeedRandomAmp, VertSpeedRandomAmp);
+            //VertSpeed += Random.Range(-VertSpeedRandomAmp, VertSpeedRandomAmp);
             audioSource.clip = BarHitSound;
             Score += BAR_HIT_PTS;
         }
@@ -127,8 +147,8 @@ public class BallController : MonoBehaviour
 
         audioSource.Play();
 
-        HorzSpeed = Mathf.Clamp(HorzSpeed, -MaxHorzSpeedAmp, MaxHorzSpeedAmp);
-        VertSpeed = Mathf.Clamp(VertSpeed, -MaxVertSpeedAmp, MaxVertSpeedAmp);
+        //HorzSpeed = Mathf.Clamp(HorzSpeed, -MaxHorzSpeedAmp, MaxHorzSpeedAmp);
+        //VertSpeed = Mathf.Clamp(VertSpeed, -MaxVertSpeedAmp, MaxVertSpeedAmp);
 
         UpdateBlocks();
         UpdateScore();
@@ -143,6 +163,7 @@ public class BallController : MonoBehaviour
         if (numBlocksHit == NumBlocks)
         {
             GameOverText.SetActive(true);
+            BallSpeed = 0f;
             VertSpeed = 0f;
             HorzSpeed = 0f;
         }
