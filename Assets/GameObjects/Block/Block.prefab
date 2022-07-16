@@ -25,8 +25,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6513776890468846699}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.5, y: 0, z: 0}
-  m_LocalScale: {x: 0.1994322, y: 0.18053699, z: 1}
+  m_LocalPosition: {x: -0.598, y: -0.083, z: 0}
+  m_LocalScale: {x: 0.2, y: 0.15, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6513776891708130850}
   - {fileID: 6513776890890778977}
@@ -76,8 +77,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 6e2ed8d12d92b40adacef79cf61285cd, type: 3}
-  m_Color: {r: 0.59362763, g: 0.8679245, b: 0.601406, a: 1}
+  m_Sprite: {fileID: 21300000, guid: e058da191eb084abab28e1d6971f423d, type: 3}
+  m_Color: {r: 0.8638305, g: 0.8679245, b: 0.8639475, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -114,6 +115,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.0015039225, y: -0.0038773047, z: 0}
   m_LocalScale: {x: 4.0113883, y: 2.7695155, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6513776890468846697}
   m_RootOrder: 1
@@ -171,6 +173,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.0015039225, y: -0.0038773047, z: 0}
   m_LocalScale: {x: 4.0113883, y: 2.7695155, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6513776890468846697}
   m_RootOrder: 3
@@ -228,6 +231,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.0015039225, y: -0.0038773047, z: 0}
   m_LocalScale: {x: 4.0113883, y: 2.7695155, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6513776890468846697}
   m_RootOrder: 0
@@ -285,6 +289,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.0015039225, y: -0.0038773047, z: 0}
   m_LocalScale: {x: 4.0113883, y: 2.7695155, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6513776890468846697}
   m_RootOrder: 2
